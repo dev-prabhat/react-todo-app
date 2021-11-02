@@ -4,11 +4,11 @@ import Header from './Header'
 import Todoitem from './Todoitem'
 
 
-const Todolist = ({items,title}) =>{
+const Todolist = ({items,title,addNew}) =>{
     const count = items.length
     return(
     <div className="todolist">
-      <Header title={title}/>
+      <Header title={title} addNew={addNew}/>
        
         <ul className="list-unstyled">
           {items.map(item => <Todoitem item={item}/>)}
