@@ -1,12 +1,20 @@
-import React,{useState}from 'react'
+import React,{useState,useEffect}from 'react'
 import RemoveButton from './RemoveButton'
 import ShowItems from './ShowItems'
 
+// get data from local storage
+const getLocalData = () =>{
+    const lists = localStorage.getItem("mytodolist")
+    if(lists){
+        return JSON.parse(lists)
+    }
+    return []
+}
 
 
 const AddItem = () => {
     const [inputdata,setInputData] = useState("")
-    const [items, setItem] = useState([])
+    const [items, setItem] = useState(getLocalData())
 
     const addItem = () =>{
         if(!inputdata){
@@ -22,6 +30,8 @@ const AddItem = () => {
         }
     }
 
+
+    // delete a single item
     const deleteItem = (index) => {
         const updateItems = items.filter((curElem)=>{
             return curElem.id !== index
@@ -29,9 +39,16 @@ const AddItem = () => {
         setItem(updateItems)
     }
 
+    // delete all items
     const removeAll = () =>{
         setItem([])
     }
+
+
+    // appending data in the local storage
+    useEffect(() => {
+        localStorage.setItem("mytodolist",JSON.stringify(items))
+    }, [items])
 
     return(
            <div>
