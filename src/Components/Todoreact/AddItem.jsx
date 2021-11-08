@@ -1,7 +1,22 @@
 import React,{useState}from 'react'
+import ShowItems from './ShowItems'
+
+
 
 const AddItem = () => {
     const [inputdata,setInputData] = useState("")
+    const [items, setItem] = useState([])
+
+    const addItem = () =>{
+        if(!inputdata){
+            alert("Please fill the required field")
+        }
+        else{
+            setItem([...items,inputdata])
+        }
+    }
+
+    
     return(
            <div>
                 <div className="addImage">
@@ -11,17 +26,13 @@ const AddItem = () => {
                     value={inputdata}
                     onChange={(e)=>setInputData(e.target.value)}/>
 
-                    <i className="fa fa-plus add-btn"></i>
+                    <i className="fa fa-plus add-btn" onClick={addItem}></i>
                 </div>
                 {/* show our item */}
                 <div className="showItmes">
-                        <div className="eachItem">
-                            <h3>apple</h3>
-                        <div className="todo-btn">
-                            <i className="far fa-edit add-btn"></i>
-                            <i className="far fa-trash-alt add-btn"></i>
-                        </div>
-                    </div>
+                        {
+                            items.map((item,index) => <ShowItems item={item} key={index}/>)
+                        }
                 </div>
                 <div className="showItems">
                     <button className="btn effect04" data-sm-link-text="Remove All">
