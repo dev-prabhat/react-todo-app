@@ -15,10 +15,25 @@ const getLocalData = () =>{
 const AddItem = () => {
     const [inputdata,setInputData] = useState("")
     const [items, setItem] = useState(getLocalData())
+    const [updateItem, setUpdateItem] = useState()
+    const [toggleButton, setToggleButton] = useState(false)
 
     const addItem = () =>{
         if(!inputdata){
             alert("Please fill the required field")
+        }
+        else if(inputdata && toggleButton){
+          setItem(
+              items.map((curElem)=>{
+                  if(curElem.id === updateItem){
+                      return{...curElem,name:inputdata}
+                  }
+                  return curElem
+              })
+          )
+        setInputData("")
+        setUpdateItem(null)
+        setToggleButton(false)
         }
         else{
             const newInputData={
@@ -30,13 +45,24 @@ const AddItem = () => {
         }
     }
 
+    // edit the item
+    const editItem = (index) =>{
+        const edited_item = items.find((curElem)=>{
+            return curElem.id === index
+        })
+
+        setInputData(edited_item.name)
+        setUpdateItem(index)
+        setToggleButton(true)
+    }
+
 
     // delete a single item
     const deleteItem = (index) => {
-        const updateItems = items.filter((curElem)=>{
+        const updatedItems = items.filter((curElem)=>{
             return curElem.id !== index
         })
-        setItem(updateItems)
+        setItem(updatedItems)
     }
 
     // delete all items
@@ -58,13 +84,15 @@ const AddItem = () => {
                     placeholder="✍ Add Items" className="form-control"
                     value={inputdata}
                     onChange={(e)=>setInputData(e.target.value)}/>
-
-                    <i className="fa fa-plus add-btn" onClick={addItem}></i>
+                    
+                    {toggleButton? <i className="fa fa-edit add-btn" onClick={addItem}></i>:
+                    <i className="fa fa-plus add-btn" onClick={addItem}></i>}
                 </div>
+                <br/>
                 {/* show our item */}
                 <div className="showItmes">
                         {
-                            items.map((item) => <ShowItems item={item} key={item.id} deleteItem={deleteItem}/>)
+                            items.map((item) => <ShowItems item={item} key={item.id} deleteItem={deleteItem} editItem={editItem}/>)
                         }
                 </div>
                 <RemoveButton removeAll={removeAll}/>
